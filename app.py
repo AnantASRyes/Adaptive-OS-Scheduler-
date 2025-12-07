@@ -1,3 +1,18 @@
+"""
+CA2 Project – Adaptive OS Scheduler for Real-Time Systems
+Author: Anant Veer
+Course: CSE316 Operating Systems
+University: Lovely Professional University (LPU)
+
+Description:
+This Streamlit application simulates three scheduling algorithms:
+1. RMS (Rate Monotonic Scheduling)
+2. EDF (Earliest Deadline First)
+3. Adaptive Scheduler (Switches between RMS/EDF based on utilization & deadline misses)
+
+This file is the final integrated program submission for CA2.
+"""
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -296,3 +311,6 @@ if st.button("Run Simulation"):
         st.error(f"Error during simulation: {e}")
 else:
     st.info("Configure the tasks and click 'Run Simulation' to start the simulation.")
+
+# --------------------- End of CA2 Project ---------------------
+
