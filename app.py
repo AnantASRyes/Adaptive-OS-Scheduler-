@@ -251,6 +251,46 @@ if st.button("Run Simulation"):
         st.subheader("Raw Schedule (first 100 entries)")
         sched_df = pd.DataFrame(schedule, columns=["Time", "Task"])
         st.dataframe(sched_df.head(100))
+        def plot_gantt(schedule):
+    """
+    Draw a simple Gantt-style chart from schedule = [(time, task_name), ...]
+    """
+    if not schedule:
+        st.warning("No schedule to display.")
+        return
+
+    # Build segments: (task, start, end)
+    segments = []
+    current_task = schedule[0][1]
+    start_time = schedule[0][0]
+
+    for i in range(1, len(schedule)):
+        t, task = schedule[i]
+        prev_t, prev_task = schedule[i - 1]
+        if task != prev_task:
+            segments.append((prev_task, start_time, prev_t + 1))
+            start_time = t
+            current_task = task
+
+    # Last segment
+    last_time, last_task = schedule[-1]
+    segments.append((last_task, start_time, last_time + 1))
+
+    # Map tasks to y positions
+    tasks = sorted(list({s[0] for s in segments}))
+    task_to_y = {task: i for i, task in enumerate(tasks)}
+
+    fig, ax = plt.subplots()
+    for task, start, end in segments:
+        y = task_to_y[task]
+        ax.barh(y, end - start, left=start)
+    ax.set_yticks(list(task_to_y.values()))
+    ax.set_yticklabels(tasks)
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Task / IDLE")
+    ax.set_title("Schedule Gantt Chart")
+
+    st.pyplot(fig)
 
     except Exception as e:
         st.error(f"Error during simulation: {e}")
